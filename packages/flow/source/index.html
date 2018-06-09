@@ -3,35 +3,35 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>@{config.name} - Flow @{repository.versiontitle}</title>
+	<title>@{config.name} - Flow @{R.versiontitle}</title>
 	<meta charset="utf-8" />
 	<meta http-equiv="X-UA-Compatible" content="IE=11" />
 	<meta name="format-detection" content="telephone=no" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no, viewport-fit=cover" />
 	<meta name="robots" content="all,follow" />
-	<link rel="apple-touch-icon" href="@{repository.url}img/icon.png" type="image/png" />
-	<link rel="icon" href="@{repository.url}img/icon.png" type="image/png" />
-	@{if repository.sharedfiles}
+	<link rel="apple-touch-icon" href="@{R.url}img/icon.png" type="image/png" />
+	<link rel="icon" href="@{R.url}img/icon.png" type="image/png" />
+	@{if R.sharedfiles}
 	<link href="/css/dep.min.css" rel="stylesheet" type="text/css" />
 	@{fi}
-	<link href="@{repository.url}default.css" rel="stylesheet" type="text/css" />
-	@{if repository.sharedfiles}
+	<link href="@{R.url}default.css" rel="stylesheet" type="text/css" />
+	@{if R.sharedfiles}
 	<script src="/js/dep.min.js"></script>
 	@{fi}
-	<script src="@{repository.url}default.js"></script>
+	<script src="@{R.url}default.js"></script>
 </head>
-<body data-jc="exec,binder"@{if repository.dark} class="themedark"@{fi}>
+<body data-jc="exec,binder"@{if R.dark} class="themedark"@{fi}>
 
 	<div data-jc="autocomplete"></div>
-	<div data-jc="calendar" data-jc-config="days:@(SU,MO,TU,WE,TH,FR,SO);months:@(January,February,March,April,May,June,July,August,September,October,November,December);today:@(Set date to today);firstday:0"></div>
-	<div data-jc="confirm"></div>
-	<div data-jc="contextmenu"></div>
+	<div data-jc="LAZY calendar" data-jc-config="days:@(SU,MO,TU,WE,TH,FR,SO);months:@(January,February,March,April,May,June,July,August,September,October,November,December);today:@(Set date to today);firstday:0"></div>
+	<div data-jc="LAZY confirm"></div>
+	<div data-jc="LAZY contextmenu"></div>
 	<div data-jc="colorpicker"></div>
 	<div data-jc="loading" class="ui-loading ui-loading-firstload"></div>
-	<div data-jc="message__null__button:@(Close)"></div>
-	<div data-jc="snackbar__null__button:@(Dismiss)"></div>
-	<div data-jc="websocket__null__url:@{repository.url}?designer=1&token=@{query.token}&baa=@{repository.baa}"></div>
-	<div data-jc="features__null__placeholder:@(Search feature ...)"></div>
+	<div data-jc="LAZY message__null__button:@(Close)"></div>
+	<div data-jc="LAZY snackbar__null__button:@(Dismiss)"></div>
+	<div data-jc="websocket__null__url:@{R.url}?designer=1&token=@{query.token}&baa=@{R.baa}"></div>
+	<div data-jc="LAZY features__null__placeholder:@(Search feature ...)"></div>
 	<div data-jc="shortcuts"></div>
 
 	<div id="success"><span class="fa fa-refresh fa-spin"></span></div>
@@ -129,17 +129,13 @@
 			</div>
 		</div>
 	</div>
-
 	<div class="mainmenu body-components">
+
 
 
 		<div class="components-search-padding">
 			<div data-jc="textbox__common.search__placeholder:@(Search components ...);type:search"></div>
-
-
 		</div>
-
-
 
 		<div data-jc="search__common.search__selector:li">
 			<div class="components-container">
@@ -161,23 +157,13 @@
 		</div>
 	</div>
 
-
-
-
-    <div>
-        <section class="tabs tabs-controls">
-                <nav>
-                    <!-- todo hamza navbar-->
-                    <button title="@(Apply the current Flow)" class="exec highlight" data-exec="#flow.apply"><i class="fa fa-play-circle"></i>@(APPLY)</button>
-                    <button title="@(Pause / Play)" class="exec onlyicon" data-exec="flowpause" data-bind="flow.paused__change:flowpausestyle"><i class="fa"></i></button>
-                    <button title="@(Kill kernel)" class="exec onlyicon" data-exec="kernelstop" data-bind="flow.paused__change:flowpausestyle"><i class="fa fa-stop-circle"></i></button>
-
-                    <button title="@(Stop kernel)" class="exec onlyicon" data-exec="kernelstop" data-bind="flow.paused__change:flowpausestyle"><i class="fa fa-undo"></i></button>
-
-                    <button title="@(Settings)" class="exec onlyicon" data-exec="settings_menu"><i class="fa fa-cogs"></i></button>
-                </nav>
-            </section>
-    </div>
+	<section class="tabs tabs-flow">
+		<nav>
+			<button title="@(Apply the current Flow)" class="exec highlight" data-exec="#flow.apply"><i class="fa fa-play-circle"></i>@(APPLY)</button>
+			<button title="@(Pause / Play)" class="exec onlyicon" data-exec="flowpause" data-bind="flow.paused__change:flowpausestyle"><i class="fa"></i></button>
+			<button title="@(Settings)" class="exec onlyicon" data-exec="settings_menu"><i class="fa fa-cogs"></i></button>
+		</nav>
+	</section>
 
 	<div class="body body-designer">
 
@@ -191,10 +177,10 @@
 		</div>
 
 		<section class="tabs tabs-flow">
-<!-- todo hamza: add a status for each kernel -->
+
 			<nav data-jc="repeater__flow.tabs">
 				<script type="text/html">
-					<a href="#{{ linker }}" class="tab" data-id="{{ id }}" data-bind="common.tab__.selected:value.id==flow.tabs[{{ index }}].id">{{ name }} <i class="fa fa-circle" style="color:red"></i></a>
+					<a href="#{{ linker }}" class="tab{{ if changed }} changed{{ fi }}" data-id="{{ id }}" data-bind="common.tab__!.selected:value.id=='{{ id }}'">{{ name }}</a>
 				</script>
 			</nav>
 
@@ -230,13 +216,13 @@
 		</div>
 	</div>
 
-	<div data-jc="importer__common.form__if:tab;url:@{repository.url}templates/form-tab.html"></div>
-	<div data-jc="importer__common.form__if:settings;url:@{repository.url}templates/form-settings.html"></div>
-	<div data-jc="importer__common.form__if:export;url:@{repository.url}templates/form-export.html;reload:formexport_reload"></div>
-	<div data-jc="importer__common.form__if:import;url:@{repository.url}templates/form-import.html;reload:formimport_reload"></div>
-	<div data-jc="importer__common.form__if:database;url:@{repository.url}templates/form-database.html;reload:formdatabase_reload"></div>
-	<div data-jc="importer__common.form__if:variables;url:@{repository.url}templates/form-variables.html;reload:formvariables_reload"></div>
-	<div data-jc="importer__common.form2__if:components;url:@{repository.url}templates/form-components.html"></div>
+	<div data-jc="importer__common.form__if:tab;url:@{R.url}templates/form-tab.html"></div>
+	<div data-jc="importer__common.form__if:settings;url:@{R.url}templates/form-settings.html"></div>
+	<div data-jc="importer__common.form__if:export;url:@{R.url}templates/form-export.html;reload:formexport_reload"></div>
+	<div data-jc="importer__common.form__if:import;url:@{R.url}templates/form-import.html;reload:formimport_reload"></div>
+	<div data-jc="importer__common.form__if:database;url:@{R.url}templates/form-database.html;reload:formdatabase_reload"></div>
+	<div data-jc="importer__common.form__if:variables;url:@{R.url}templates/form-variables.html;reload:formvariables_reload"></div>
+	<div data-jc="importer__common.form2__if:components;url:@{R.url}templates/form-components.html"></div>
 
 	<div id="flowsettings"></div>
 	<div id="tmpclone"></div>
@@ -258,8 +244,8 @@
 			!this.tabscroll && (this.tabscroll = {});
 			!this.animations && (this.animations = true);
 			this.touches = false;
-			this.theme === undefined && (this.theme = '@{if repository.dark}dark@{fi}');
-			this.updates = @{repository.updates};
+			this.theme === undefined && (this.theme = '@{if R.dark}dark@{fi}');
+			this.updates = @{R.updates};
 			this.version = +'@{R.version}';
 			this.beautify === undefined && (this.beautify = true);
 			this.callbacks = {};
@@ -400,6 +386,41 @@
 			}
 		});
 
+		common.changes = {};
+		common.changedtabs = false;
+
+		ON('changed', function(action, id){
+			id && (common.changes[id] = common.changes[id] || []);
+			var changes = common.changes;
+			switch (action) {
+				case 'add':
+					changes[id].push(action);
+					break;
+				case 'mov':
+				 	// don't care if it's new component or already moved
+					if (!~changes[id].indexOf('add') && !~changes[id].indexOf('mov'))
+						changes[id].push(action);
+					break;
+				case 'rem':
+					if (~changes[id].indexOf('add'))
+						changes[id] = undefined; // remove if not on server yet
+					else
+						changes[id].push(action);
+					break;
+				case 'add.connection':
+				case 'rem.connection':
+					if (!~changes[id].indexOf('add')) // don't care if it's new component, it's taken care of above
+						changes[id].push('conn');
+					break;
+				case 'tabs':
+					common.changedtabs = true;
+					break;
+				case 'flow.clear':
+					common.changedtabs = true;
+					break;
+			};
+		});
+
 		ON('designer.add', function(component, x, y, is, cf, ct, toindex, duplicate, fromindex) {
 			var obj = {};
 			obj.component = component.id;
@@ -446,12 +467,15 @@
 			!is && SETTER('designer', 'add', obj);
 			EMIT('add.' + obj.component);
 			setState(MESSAGES.apply);
+
+			EMIT('changed', 'add', obj.id);
 		});
 
 		ON('designer.rem', function(ids) {
 			ids && SETTER('confirm', 'confirm', '@(Are you sure you want to remove selected components?)', ['"trash-o" @(Yes)', '@(Cancel)'], function(index) {
 				if (index)
 					return;
+
 				ids.waitFor(function(id, next){
 					var instance = flow.components.findItem('id', id);
 					EMIT('rem.' + instance.component, instance);
@@ -466,6 +490,8 @@
 					});
 
 					var el = $('.node_' + id);
+
+					EMIT('changed', 'rem', id);
 
 					$('.node_connection').each(function() {
 						var el = $(this);
@@ -543,6 +569,7 @@
 
 		ON('designer.add.connection', function(a, b) {
 			setState(MESSAGES.apply);
+			EMIT('changed', 'add.connection', a, b);
 		});
 
 		ON('designer.rem.connection', function(selected) {
@@ -555,14 +582,15 @@
 				var component = flow.components.findItem('id', sel.attrd('from'));
 				if (!component)
 					return;
-				var connections = component.connections[sel.attrd('toindex')];
+				var connections = component.connections[sel.attrd('fromindex')];
 				if (!connections)
 					return;
 				connections = connections.remove(function(item) {
-					return item.index === sel.attrd('fromindex') && item.id === sel.attrd('to');
+					return item.index === sel.attrd('toindex') && item.id === sel.attrd('to');
 				});
-				component.connections[sel.attrd('toindex')] = connections;
-				!connections.length && (delete component.connections[sel.attrd('toindex')]);
+				EMIT('changed', 'rem.connection', component.id);
+				component.connections[sel.attrd('fromindex')] = connections;
+				!connections.length && (delete component.connections[sel.attrd('fromindex')]);
 
 				next();
 
@@ -657,7 +685,6 @@
 
 		ON('designer.component.io', function(comid, type, io_index, enable) {
 			SETTER('websocket', 'send', { target: comid, type: 'io', io: type, index: io_index, enable: enable });
-			//setState(MESSAGES.apply);
 		});
 
 		$(window).on('hashchange', function() {
@@ -673,34 +700,6 @@
 			e.keyCode === 13 && (e.ctrlKey || e.metaKey) && OPERATION('flow.apply')();
 		});
 
-		// Tabs operations
-		OPERATION('tabs.add', function() {
-
-			formtabpositions = [];
-			for (var i = 0; i < flow.tabs.length + 1; i++)
-				formtabpositions.push({ id: i + 1, name: i + 1 });
-
-			UPDATE('formtabpositions');
-			SET('formtab', { position: flow.tabs.length + 1 }, true);
-			SET('common.form', 'tab');
-		});
-
-		OPERATION('tabs.upd', function(id) {
-
-			formtabpositions = [];
-			for (var i = 0; i < flow.tabs.length; i++)
-				formtabpositions.push({ id: i + 1, name: i + 1 });
-
-			UPDATE('formtabpositions');
-
-			var index = flow.tabs.findIndex('id', id);
-			if (index !== -1) {
-				var data = CLONE(flow.tabs[index]);
-				data.position = index + 1;
-				SET('formtab', data, true);
-				SET('common.form', 'tab');
-			}
-		});
 
 		function settings_component() {
 			id = flow.selected[0].attrd('id');
@@ -711,7 +710,11 @@
 			SETTER('confirm', 'confirm', '@(Are you sure you want to clear your current workflow in current tab?)', ['"trash-o" @(Yes)', '@(Cancel)'], function(index) {
 				if (index)
 					return;
-				flow.components = flow.components.remove('tab', common.tab.id);
+				flow.components = flow.components.remove(function(comp){
+					if (comp.tab === common.tab.id)
+						EMIT('changed', 'rem', comp.id);
+					return comp.tab === common.tab.id;
+				});
 				UPDATE('flow');
 				SETTER('binder', 'scan');
 				EMIT('designer.refresh');
@@ -794,6 +797,16 @@
 			SET('common.form', '');
 		});
 
+		function cleanComponent(id, mov) {
+			var comp = CLONE(flow.components.findItem('id', id));
+			if (mov)
+				return { id: id, x: comp.x, y: comp.y };
+			comp.$component = undefined;
+			comp.changed = undefined;
+			comp.isnew = undefined;
+			return comp;
+		};
+
 		OPERATION('flow.apply', function() {
 			SETTER('confirm', 'confirm', '@(Are you sure you want to apply current workflow?)', ['"play-circle" @(APPLY NOW)', '@(Cancel)'], function(index) {
 				if (index)
@@ -803,12 +816,7 @@
 
 				$('.node_new').rclass('node_new');
 				$('.path_new').rclass('path_new');
-				var body = CLONE(flow);
-				body.loaded = undefined;
-				body.designer = undefined;
-				body.traffic = undefined;
-				body.selected = undefined;
-				body.connections = undefined;
+
 				flow.connections = {};
 
 				flow.components.forEach(function(item) {
@@ -821,19 +829,40 @@
 					});
 				});
 
-				body.components.forEach(function(item) {
-					item.$component = undefined;
+				flow.tabs.forEach(function(item) {
+					item.changed = undefined;
 				});
 
 				EMIT('apply');
 				SETTER('designer', 'animclear');
+				$('.tabs-flow').find('.changed').rclass('changed');
 
-				var message = {};
-				message.type = 'apply';
-				message.body = body;
+				var temp = [];
+				var changes = common.changes;
+
+				// changes === { id: [ 'add', 'rem' ]}
+				Object.keys(changes).forEach(function(id){
+					if (!changes[id])
+						return;
+					if (~changes[id].indexOf('add'))
+						temp.push({ type: 'add', com: cleanComponent(id) });
+					else if (~changes[id].indexOf('rem'))
+						temp.push({ type: 'rem', id: id });
+					else {
+						if (~changes[id].indexOf('mov'))
+							temp.push({ type: 'mov', com: cleanComponent(id, true) });
+						if (~changes[id].indexOf('conn'))
+							temp.push({ type: 'conn', id: id, conn: flow.components.findItem('id', id).connections });
+					}
+				});
+
+				if (common.changedtabs)
+					temp.push({ type: 'tabs', tabs: flow.tabs });
+
+				common.changes = {};
 
 				setState('');
-				SETTER('websocket', 'send', message);
+				SETTER('websocket', 'send', { type: 'apply', body: temp });
 				setTimeout(success, 1000);
 				refreshTrafficNodes();
 			});
@@ -845,18 +874,53 @@
 			});
 		});
 
+		OPERATION('debug.clear', function() {
+			$('#body-debug-output').empty();
+		});
+
+		// Tabs operations
+		OPERATION('tabs.add', function() {
+
+			formtabpositions = [];
+			for (var i = 0; i < flow.tabs.length + 1; i++)
+				formtabpositions.push({ id: i + 1, name: i + 1 });
+
+			UPDATE('formtabpositions');
+			SET('formtab', { position: flow.tabs.length + 1 }, true);
+			SET('common.form', 'tab');
+		});
+
+		OPERATION('tabs.upd', function(id) {
+
+			formtabpositions = [];
+			for (var i = 0; i < flow.tabs.length; i++)
+				formtabpositions.push({ id: i + 1, name: i + 1 });
+
+			UPDATE('formtabpositions');
+
+			var index = flow.tabs.findIndex('id', id);
+			if (index !== -1) {
+				var data = CLONE(flow.tabs[index]);
+				data.position = index + 1;
+				SET('formtab', data, true);
+				SET('common.form', 'tab');
+			}
+		});
+
 		OPERATION('tabs.rem', function(id) {
-			flow.components = flow.components.remove('tab', id);
+			flow.components = flow.components.remove(function(comp){
+				if (comp.tab === id)
+					EMIT('changed', 'rem', comp.id);
+				return comp.tab === id;
+			});
+
 			SET('flow.tabs', flow.tabs.remove('id', id));
 			SETTER('binder', 'scan');
 			if (common.tab.id === id)
 				location.hash = flow.tabs[0].linker;
 			OPERATION('designer.unselect')();
-			setState(MESSAGES.apply);
-		});
-
-		OPERATION('debug.clear', function() {
-			$('#body-debug-output').empty();
+			setState(MESSAGES.apply, true);
+			EMIT('changed', 'tabs');
 		});
 
 		ON('tabs.save', function(form) {
@@ -865,6 +929,7 @@
 			o.name = form.name;
 			o.icon = form.icon;
 			o.linker = o.name.slug();
+			o.changed = true;
 
 			if (!o.linker)
 				o.linker = GUID(8);
@@ -891,6 +956,8 @@
 			UPDATE('flow.tabs');
 			SETTER('binder', 'scan');
 			location.hash = o.linker;
+
+			EMIT('changed', 'tabs');
 		});
 
 		ON('online', function(online) {
@@ -973,8 +1040,10 @@
 				flow.designer = [];
 				flow.loaded = true;
 
-				if (!flow.tabs)
+				if (!flow.tabs) {
 					flow.tabs = [{ id: Date.now().toString(), name: '@(Main)', icon: 'fa-object-ungroup', linker: 'main' }];
+					 EMIT('changed', 'tabs');
+				}
 
 				if (!flow.components)
 					flow.components = [];
@@ -991,8 +1060,9 @@
 				});
 
 				flow.crashmode = message.crashmode;
+
 				if (flow.crashmode) {
-					setState(MESSAGES.apply);
+					setState(MESSAGES.apply, true);
 					SETTER('confirm', 'confirm', '@(<h3 class="nmb red">Crash mode</h3>Flow is in <b>crash mode</b> and data processing is paused. You need to press <b>APPLY</b> for re-init Flow again.)', ['"chevron-right"@(Continue in editing)'], NOOP);
 				}
 
@@ -1144,7 +1214,8 @@
 			$(document.body).tclass('panel-minized', value);
 		}, true);
 
-		function setState(value) {
+		function setState(value, noChange) {
+			!noChange && value && changedTab();
 			$('#designerstate').html(value);
 			$('.mainmenu').find('.highlight').tclass('blink', value ? true : false);
 		}
@@ -1245,6 +1316,7 @@
 					flow.components.push(obj);
 					flow.designer.push(obj);
 					EMIT('add.' + obj.component);
+					EMIT('changed', 'add', obj.id);
 
 					var items = [];
 
@@ -1320,6 +1392,7 @@
 						flow.components.push(item);
 						flow.designer.push(item);
 						EMIT('add.' + item.component);
+						EMIT('changed', 'add', item.id);
 					});
 
 					flow.clipboard = null;
@@ -1377,7 +1450,7 @@
 
 			EMIT('settings.open', items);
 
-			FIND('contextmenu').show('left', el, items, function(value) {
+			SETTER('contextmenu', 'show', 'left', el, items, function(value) {
 
 				EMIT('settings.select', value);
 
@@ -1524,20 +1597,6 @@
 				});
 			}
 		}
-
-
-		function kernelstop() {
-			if (flow.paused) {
-				SETTER('confirm', 'show', '@(Are you sure you want to <b>start</b> the kernel?)', ['"play"@(Start now)', '@(Cancel)'], function(index) {
-					!index && SETTER('websocket', 'send', { type: 'stopkernel' });
-				});
-			} else {
-				SETTER('confirm', 'show', '@(Are you sure you want to <b>Stop</b> the kernel?)', ['@(Stop now)', '@(Cancel)'], function(index) {
-					!index && SETTER('websocket', 'send', { type: 'stopkernel' });
-				});
-			}
-		}
-
 
 		function flowpausestyle(value) {
 

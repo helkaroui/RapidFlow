@@ -1068,9 +1068,14 @@ COMPONENT('websocket', 'reconnect:2000', function(self, config) {
 		return self;
 	};
 
-	function onClose() {
+	function onClose(e) {
+		var r = e.reason;
 		self.close(true);
 		setTimeout(self.connect, config.reconnect);
+		if (r) {
+			r = decodeURIComponent(r);
+			r.indexOf('request length') !== -1 && SETTER('message', 'warning', '<i class="fa fa-warning mr5"></i><b>UNEXPECTED ERROR</b><div class="mt10">Flow wasn\'t saved due to the exceed designer size. You need to increase the limit.</div>');
+		}
 	}
 
 	function onMessage(e) {
@@ -1370,6 +1375,7 @@ COMPONENT('designer', function() {
 					// Current node
 					self.moveselected(offsetX + move.offsetX, offsetY + move.offsetY, e);
 					setState(MESSAGES.apply);
+					EMIT('changed', 'mov', move.node.attrd('id'));
 					return;
 			}
 		};
@@ -1782,12 +1788,25 @@ COMPONENT('designer', function() {
 
 		top = ((height / 2) - ((input * padding) / 2)) + 10;
 
-        // todo modify component shape here
 		for (var i = 0; i < input; i++) {
 			var o = points.asvg('circle').attr('class', 'input').attrd('index', i).attr('cx', 0).attr('cy', top + i * padding).attr('r', radius);
-			if (inputcolors)
-				o.attr('fill', inputcolors[i]);
-			else
+			if (inputcolors) {
+				var t = inputcolors[i] || '';
+				if (t.indexOf('|') !== -1) {
+					t = t.split('|');
+					var tcolor = (t[0] || '').trim();
+					var ttitle = (t[1] || '').trim();
+					o.attr('fill', tcolor ? tcolor : common.theme === 'dark' ? 'white' : 'black');
+					ttitle && o.asvg('title').text(ttitle);
+				} else {
+					if ((/^[a-z]|^#/).test(t))
+						o.attr('fill', t);
+					else {
+						o.attr('fill', common.theme === 'dark' ? 'white' : 'black');
+						o.asvg('title').text(t);
+					}
+				}
+			} else
 				o.attr('fill', common.theme === 'dark' ? 'white' : 'black');
 
 			if (item.disabledio && item.disabledio.input.indexOf(i) > -1) {
@@ -1805,12 +1824,27 @@ COMPONENT('designer', function() {
 
 			if (err) {
 				o.attr('fill', 'red');
+				o.asvg('title').text('Error path');
 				continue;
 			}
 
-			if (outputcolors)
-				o.attr('fill', outputcolors[i]);
-			else
+			if (outputcolors) {
+				var t = outputcolors[i] || '';
+				if (t.indexOf('|') !== -1) {
+					t = t.split('|');
+					var tcolor = (t[0] || '').trim();
+					var ttitle = (t[1] || '').trim();
+					o.attr('fill', tcolor ? tcolor : common.theme === 'dark' ? 'white' : 'black');
+					ttitle && o.asvg('title').text(ttitle);
+				} else {
+					if ((/^[a-z]|^#/).test(t))
+						o.attr('fill', t);
+					else {
+						o.attr('fill', common.theme === 'dark' ? 'white' : 'black');
+						o.asvg('title').text(t);
+					}
+				}
+			} else
 				o.attr('fill', common.theme === 'dark' ? 'white' : 'black');
 
 			if (item.disabledio && item.disabledio.output.indexOf(i) > -1) {
@@ -2032,10 +2066,10 @@ COMPONENT('designer', function() {
 		attr['d'] = diagonal(ax, ay, bx, by);
 		attr['data-offset'] = '{0},{1},{2},{3},{4},{5},{6},{7}'.format(acx, acy, bcx, bcy, ax, ay, bx, by);
 		attr['stroke-width'] = 3;
-		attr['data-fromindex'] = iindex;
+		attr['data-fromindex'] = oindex;
 		attr['data-from'] = aid;
 		attr['data-to'] = bid;
-		attr['data-toindex'] = oindex;
+		attr['data-toindex'] = iindex;
 		attr['class'] = 'node_connection selectable from_' + aid + ' to_' + bid + (flow.connections[aid + '#' + oindex + '#' + iindex + '#' + bid] ? '' : ' path_new') + (oindex === 99 ? ' path_err' : '');
 		attr['id'] = 'id' + aid + '' + bid;
 		lines.asvg('path').attr(attr);
@@ -4717,7 +4751,7 @@ COMPONENT('multioptions', function(self) {
 
 			if (type === 'date') {
 				el = el.parent().parent().find('input');
-				FIND('calendar').show(el, el.val().parseDate(), function(date) {
+				SETTER('calendar', 'show', el, el.val().parseDate(), function(date) {
 					el.val(date.format('yyyy-MM-dd'));
 					self.$save();
 				});
@@ -4782,7 +4816,7 @@ COMPONENT('multioptions', function(self) {
 
 		self.event('focus', '.ui-moi-date', function() {
 			var el = $(this);
-			FIND('calendar').toggle(el, el.val().parseDate(), function(date) {
+			SETTER('calendar', 'toggle', el, el.val().parseDate(), function(date) {
 				el.val(date.format('yyyy-MM-dd'));
 				self.$save();
 			});

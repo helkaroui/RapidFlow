@@ -100,25 +100,12 @@ class Kernel{
         this.kernel.shutdown().then(callback);
     };
 
-    execute(code,callback){
-        var future = this.kernel.requestExecute({ code: code });
+    execute(callback){
+        var future = this.kernel.requestExecute({ code: 'print("hello !")' });
         future.onIOPub = (msg) => {
             callback(msg);
         };
     };
-
-    register_component(component, callback){
-        // add imports =
-        var code = `def comp_${component.tab}_${component.id}(input):\n    output = [None,]*${component.countoutput}\n    # code here`;
-        this.execute(code, callback);
-    }
-
-
-    run_component(component, inputs, callback){
-        // todo complete this func
-        var code = `out_${component.tab}_${component.id} = comp_${component.tab}_${component.id}(input)`;
-        this.execute(code, callback);
-    }
 
 }
 
@@ -1379,25 +1366,6 @@ FLOW.changes = function(arr) {
             refreshconn = true;
         } else if( c.type === 'tabs') {
             MESSAGE_DESIGNER.tabs = c.tabs;
-
-            MESSAGE_DESIGNER.tabs.forEach(function (tab, index) {
-                // todo Hamza : remove kernel when tab is removed
-                if(!global.kernels[tab.id]){
-                    global.kernels[tab.id] = new Kernel(baseUrl, token, 'tab_'+tab.id);
-                    global.kernels[tab.id].connect(function (){
-                        MESSAGE_DESIGNER.tabs[index].status = 'green'
-                    });
-
-                    global.kernels[tab.id].on_busy = function (){
-                        MESSAGE_DESIGNER.tabs[index].status = 'yellow'
-                    };
-
-                    global.kernels[tab.id].on_idle = function (){
-                        MESSAGE_DESIGNER.tabs[index].status = 'green'
-                    };
-
-                }
-            });
         }
     });
 
