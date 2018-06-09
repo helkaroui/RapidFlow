@@ -1,0 +1,10 @@
+language: node_js
+cache:
+  - npm
+node_js:
+  - "8.9.1"
+install:
+  - npm install
+script:
+  - cd test
+  - bash run.sh

@@ -1,0 +1,4 @@
+name                         : RapidFlow v0.1
+
+// Packages settings
+package#flow       (Object)  : { url: '/' }

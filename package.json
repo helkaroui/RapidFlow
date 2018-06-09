@@ -1,0 +1,22 @@
+{
+	"name": "RapidFlow",
+	"description": "RapidFlow",
+	"version": "1.0.0",
+	"main": "debug.js",
+	"dependencies": {
+		"@jupyterlab/services": "latest",
+		"mosca": "^2.8.2",
+		"mqtt": "^2.18.0",
+		"node-schedule": "^1.3.0",
+		"total.js": "latest"
+	},
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"keywords": [
+		"empty",
+		"project"
+	],
+	"author": "Hamza EL KAROUI",
+	"license": "MIT"
+}
