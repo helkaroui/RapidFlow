@@ -11,12 +11,6 @@ based on [Flow.JS](https://github.com/totaljs/flow)
 
 ![picture](https://github.com/helkaroui/RapidFlow/raw/master/image/screen2.png)
 
-# How it's working:
-RapidFlow creates a kernel for each flow tab and connect to it. When inserting a new component, 
-RapidFlow declares a new function (with the component id). When flow needs to run the component, 
-the component function will be called and returns a variable stored only in the kernel.
-No data will be passed to the frontend. 
-
 # Installation 
 
 - install jupyter/services [link](https://www.npmjs.com/package/@jupyterlab/services)
