@@ -11,6 +11,7 @@
 	<meta name="robots" content="all,follow" />
 	<link rel="apple-touch-icon" href="@{R.url}img/icon.png" type="image/png" />
 	<link rel="icon" href="@{R.url}img/icon.png" type="image/png" />
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 	@{if R.sharedfiles}
 	<link href="/css/dep.min.css" rel="stylesheet" type="text/css" />
 	@{fi}
@@ -147,7 +148,7 @@
 							</li>
 						</script>
 						<script type="text/html">
-							<li class="group" data-search="">{{ group }}</li>
+							<li class="group" data-search=""><i class="fas fa-folder-open"></i>&nbsp;{{ group }}</li>
 							{{ body | raw }}
 						</script>
 					</ul>
@@ -181,7 +182,7 @@
 
 			<nav data-jc="repeater__flow.tabs">
 				<script type="text/html">
-					<a href="#{{ linker }}" class="tab{{ if changed }} changed{{ fi }}" data-id="{{ id }}" data-bind="common.tab__!.selected:value.id=='{{ id }}'">{{ name }}</a>
+					<a href="#{{ linker }}" class="tab{{ if changed }} changed{{ fi }}" data-id="{{ id }}" data-bind="common.tab__!.selected:value.id=='{{ id }}'"><i class="fas fa-terminal" style="color:{{ status }}"></i> &nbsp; {{ name }}</a>
 				</script>
 			</nav>
 

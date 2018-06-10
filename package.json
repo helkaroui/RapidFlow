@@ -1,7 +1,8 @@
 {
 	"name": "RapidFlow",
 	"description": "RapidFlow",
-	"version": "1.0.0",
+	"author": "Hamza EL KAROUI",
+	"version": "0.1.0",
 	"main": "debug.js",
 	"dependencies": {
 		"@jupyterlab/services": "latest",

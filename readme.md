@@ -1,13 +1,21 @@
 !--- Under Development ---! 
+# RapidFlow
+RapidFlow is An open source framework for configuring, building, and deploying machine learning models in Python.
+RapidFlow is a visual frontend to make machine learning approachable for Engineers with basic knowledge in data science.
+RapidFlow is using Jupyter as its backend server. It also provides client and kernel management for working with kernels.
 
-# RapidFlow is based on Flow JS
-RapidFlow is a visual tool for bringing machine learning model into production. 
-It's used primarily to make POC.
 
-RapidFlow allows you:
-- to create pipelines
-- deploy your sklearn/TensorFlow models
+based on [Flow.JS](https://github.com/totaljs/flow)
 
+![Image of Yaktocat](https://github.com/helkaroui/RapidFlow/tree/master/image/screen.png)
+
+
+
+# How it's working:
+RapidFlow creates a kernel for each flow tab and connect to it. When inserting a new component, 
+RapidFlow declares a new function (with the component id). When flow needs to run the component, 
+the component function will be called and returns a variable stored only in the kernel.
+No data will be passed to the frontend. 
 
 # Installation 
 
@@ -22,10 +30,21 @@ conda install notebook
 
 
 # Start RapidFlow
-
-- download example
-- open terminal / command-line
 - open app directory
-- install latest version of Total.js from NPM `$ npm install total.js`
-- run `$ node debug.js`
+- install latest dependencies from NPM `$ npm install`
+- run `$ python main.py`
 - open browser `http://127.0.0.1:8000`
+
+# Done
+
+===== 06-10-2018 =====
+- Starting a kernel for each tab 
+- Common | Code component done
+- Script to run both servers 
+- Kernel status (tab icon)
+
+# Todo
+before 16-10-2018 :
+- apply automatically when adding a new tab (to run kernel before adding elements, otherwise it will crash)
+- manage deleting kernels properly (there are some issues)
+- stop, pause button not controlling kernels

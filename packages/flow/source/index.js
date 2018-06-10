@@ -106,15 +106,21 @@ class Kernel{
     };
 
     register_component(component, callback){
-        // add imports =
-        var code = `def comp_${component.tab}_${component.id}(input):\n    output = [None,]*${component.countoutput}\n    # code here`;
+        var import_list = []
+        component.options.imports.forEach(function(lib){
+            import_list.push('import '+lib+'\n');
+        });
+
+        var code = `${import_list}def comp_${component.id}(input=None):\n    output = [True,]*${component.options.outputs}\n${component.options.code}\n    return output`;
         this.execute(code, callback);
     }
 
 
     run_component(component, inputs, callback){
-        // todo complete this func
-        var code = `out_${component.tab}_${component.id} = comp_${component.tab}_${component.id}(input)`;
+        if(inputs){
+            var code = `out_${component.id} = comp_${component.id}( ${inputs} )`;
+        }
+        else{var code = `out_${component.id} = comp_${component.id}()`;}
         this.execute(code, callback);
     }
 
