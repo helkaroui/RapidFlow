@@ -2,7 +2,16 @@
 // FOR DEVELOPMENT
 // Total.js - framework for Node.js platform
 // https://www.totaljs.com
+// Created by
+// Modified by : Hamza EL KAROUI
 // ===================================================
+
+global.baseUrl = process.argv[2]
+global.token = process.argv[3]
+
+console.log('------------------<debug.js>--------------------')
+console.log(global.baseUrl)
+console.log(global.token)
 
 const options = {};
 

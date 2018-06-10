@@ -8,7 +8,8 @@
 		"mosca": "^2.8.2",
 		"mqtt": "^2.18.0",
 		"node-schedule": "^1.3.0",
-		"total.js": "latest"
+		"total.js": "latest",
+		"python-shell": "latest"
 	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1"

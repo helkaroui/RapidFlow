@@ -37,8 +37,6 @@ var MODIFIED = null;
 // ===================================================
 // Kernel
 // ===================================================
-var baseUrl = 'http://localhost:8888';
-var token = "d8e26602470902ecff0c447b7f81579e9dbe62990e77f452";
 
 global.kernels = {};
 
@@ -1383,7 +1381,7 @@ FLOW.changes = function(arr) {
             MESSAGE_DESIGNER.tabs.forEach(function (tab, index) {
                 tabs_id.push(tab.id)
                 if(!global.kernels[tab.id]){
-                    global.kernels[tab.id] = new Kernel(baseUrl, token, 'tab_'+tab.id);
+                    global.kernels[tab.id] = new Kernel(global.baseUrl, global.token, 'tab_'+tab.id);
                     global.kernels[tab.id].connect(function (){
                         MESSAGE_DESIGNER.tabs[index].status = 'green'
                     });
@@ -1805,7 +1803,7 @@ FLOW.load = function(callback) {
 
                     MESSAGE_DESIGNER.tabs.forEach(function (tab, index) {
                         tab.status = 'red'
-                        global.kernels[tab.id] = new Kernel(baseUrl, token, 'tab_'+tab.id);
+                        global.kernels[tab.id] = new Kernel(global.baseUrl, global.token, 'tab_'+tab.id);
                         global.kernels[tab.id].connect(function (){
                             // todo important init flow only after all kernels started
                             MESSAGE_DESIGNER.tabs[index].status = 'green';
