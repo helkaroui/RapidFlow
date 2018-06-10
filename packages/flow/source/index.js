@@ -106,12 +106,19 @@ class Kernel{
     };
 
     register_component(component, callback){
-        var import_list = []
-        component.options.imports.forEach(function(lib){
-            import_list.push('import '+lib+'\n');
-        });
+        var import_list = [];
+        if(component.options.imports){
+            component.options.imports.forEach(function(lib){
+                import_list.push('import '+lib+'\n');
+            });
+        }
+        if(component.options.from_import){
+            component.options.from_import.forEach(function(lib){
+                import_list.push('from '+lib.from+' import '+lib.import+'\n');
+            });
+        }
 
-        var code = `${import_list}def comp_${component.id}(input=None):\n    output = [True,]*${component.options.outputs}\n${component.options.code}\n    return output`;
+        var code = `${import_list.join()}def comp_${component.id}(input=None):\n    output = [True,]*${component.options.outputs}\n${component.options.code}\n    return output`;
         this.execute(code, callback);
     }
 
