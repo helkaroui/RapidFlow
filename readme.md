@@ -1,9 +1,9 @@
 !--- Under Development ---! 
 # RapidFlow
-RapidFlow is An open source framework for configuring, building, and deploying machine learning models in Python.
 RapidFlow is a visual frontend to make machine learning approachable for Engineers with basic knowledge in data science.
-RapidFlow is using Jupyter as its backend server. It also provides client and kernel management for working with kernels.
+It's maint for configuring, building, and deploying machine learning models in Python.
 
+RapidFlow is using Jupyter as its backend server. It also provides client and kernel management for working with kernels.
 
 based on [Flow.JS](https://github.com/totaljs/flow)
 
