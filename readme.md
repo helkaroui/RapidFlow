@@ -9,7 +9,7 @@ based on [Flow.JS](https://github.com/totaljs/flow)
 
 ![picture](https://github.com/helkaroui/RapidFlow/raw/master/image/screen.png)
 
-
+![picture](https://github.com/helkaroui/RapidFlow/raw/master/image/screen2.png)
 
 # How it's working:
 RapidFlow creates a kernel for each flow tab and connect to it. When inserting a new component, 
