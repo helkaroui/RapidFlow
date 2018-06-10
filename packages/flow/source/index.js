@@ -1,5 +1,5 @@
 // MIT License
-// Copyright Peter Širka <petersirka@gmail.com>, Martin Smola <smola.martin@gmail.com>
+// Copyright Peter Širka <petersirka@gmail.com>, Martin Smola <smola.martin@gmail.com>, Hamza EL KAROUI <hamza.elkaroui@telecom-bretagne.eu>
 
 const Fs = require('fs');
 const Exec = require('child_process').exec;
@@ -38,7 +38,7 @@ var MODIFIED = null;
 // Kernel
 // ===================================================
 var baseUrl = 'http://localhost:8888';
-var token = "a420a5423df763256f18830799c8d597b4cab3f99d29b3de";
+var token = "d8e26602470902ecff0c447b7f81579e9dbe62990e77f452";
 
 global.kernels = {};
 
@@ -1360,7 +1360,6 @@ FLOW.clearInstances = function(){
 };
 
 FLOW.changes = function(arr) {
-    console.log('add new tab');
     var add = [];
     var rem = [];
     var needinit = false;
@@ -1379,25 +1378,31 @@ FLOW.changes = function(arr) {
             refreshconn = true;
         } else if( c.type === 'tabs') {
             MESSAGE_DESIGNER.tabs = c.tabs;
-
+            var tabs_id = []
+            // add new kernel
             MESSAGE_DESIGNER.tabs.forEach(function (tab, index) {
-                // todo Hamza : remove kernel when tab is removed
+                tabs_id.push(tab.id)
                 if(!global.kernels[tab.id]){
                     global.kernels[tab.id] = new Kernel(baseUrl, token, 'tab_'+tab.id);
                     global.kernels[tab.id].connect(function (){
                         MESSAGE_DESIGNER.tabs[index].status = 'green'
                     });
-
                     global.kernels[tab.id].on_busy = function (){
                         MESSAGE_DESIGNER.tabs[index].status = 'yellow'
                     };
-
                     global.kernels[tab.id].on_idle = function (){
                         MESSAGE_DESIGNER.tabs[index].status = 'green'
                     };
-
                 }
             });
+            // remove extra kernels
+            for(key in global.kernels){
+                if(tabs_id.indexOf(key) == -1){
+                    global.kernels[key].shutdown(function () {
+                       console.log(key, ' kernel shutdown');
+                    });
+                }
+            }
         }
     });
 
@@ -1802,7 +1807,14 @@ FLOW.load = function(callback) {
                         tab.status = 'red'
                         global.kernels[tab.id] = new Kernel(baseUrl, token, 'tab_'+tab.id);
                         global.kernels[tab.id].connect(function (){
-                            MESSAGE_DESIGNER.tabs[index].status = 'green'
+                            // todo important init flow only after all kernels started
+                            MESSAGE_DESIGNER.tabs[index].status = 'green';
+                            EMIT('flow');
+                            FLOW.init(data.components, function(){
+                                FLOW.designer();
+                                READY = true;
+                                callback && callback();
+                            });
                         });
 
                         global.kernels[tab.id].on_busy = function (){
@@ -1811,12 +1823,13 @@ FLOW.load = function(callback) {
 
                         global.kernels[tab.id].on_idle = function (){
                             MESSAGE_DESIGNER.tabs[index].status = 'green'
+                            // condition if all the other kernels are idle, then start the JS Flow
                         };
 
                     });
 
 
-
+                    /*
                     data.components.forEach(function(item) {
                         var declaration = FLOW.components[item.component];
                         if (declaration && declaration.options)
@@ -1834,19 +1847,26 @@ FLOW.load = function(callback) {
                     });
 
                     FLOW.refresh_connections();
-
+                    */
                     Fs.readFile(F.path.root(FILEINMEMORY), function(err, indata) {
                         indata && (FLOW.inmemory = indata.toString('utf8').parseJSON(true));
                         if (!FLOW.inmemory)
                             FLOW.inmemory = {};
 
                         EMIT('flow');
+
+                        /*
                         FLOW.init(data.components, function(){
                             FLOW.designer();
                             READY = true;
                             callback && callback();
                         });
+                        */
+
                     });
+
+
+
                 });
             });
         }, n => U.getExtension(n) === 'js');

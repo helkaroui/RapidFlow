@@ -161,6 +161,7 @@
 		<nav>
 			<button title="@(Apply the current Flow)" class="exec highlight" data-exec="#flow.apply"><i class="fa fa-play-circle"></i>@(APPLY)</button>
 			<button title="@(Pause / Play)" class="exec onlyicon" data-exec="flowpause" data-bind="flow.paused__change:flowpausestyle"><i class="fa"></i></button>
+			<button title="@(Shutdown)" class="exec onlyicon" data-exec="kernelsshutdown"><i class="fa fa-stop"></i></button>
 			<button title="@(Settings)" class="exec onlyicon" data-exec="settings_menu"><i class="fa fa-cogs"></i></button>
 		</nav>
 	</section>
@@ -1597,6 +1598,41 @@
 				});
 			}
 		}
+
+
+        function kernelsshutdown() {
+            if (flow.paused) {
+                SETTER('confirm', 'show', '@(Are you sure you want to <b>start</b> all kernels?)', ['"play"@(Start now)', '@(Cancel)'], function(index) {
+                    !index && SETTER('websocket', 'send', { type: 'kill_kernels' });
+                });
+            } else {
+                SETTER('confirm', 'show', '@(Are you sure you want to <b>shutdown</b> all kernels?)', ['"pause"@(shutdown now)', '@(Cancel)'], function(index) {
+                    !index && SETTER('websocket', 'send', { type: 'kill_kernels' });
+                });
+            }
+        }
+
+        function flowshutstyle(value) {
+
+            var el = this;
+
+            if (typeof(value) !== 'boolean' || common.ispaused === value)
+                return;
+
+            common.ispaused = value;
+
+            if (value) {
+                flownotifications.push('@(<b>All kernels are killed</b>. You need to start them again to process any data.)');
+                shownotifications(true);
+            }
+
+            el.tclass('red', value != true);
+            el.tclass('green', value == true);
+            el.find('.fa').tclass('fa-pause', value != true).tclass('fa-play', value === true);
+        }
+
+
+
 
 		function flowpausestyle(value) {
 
