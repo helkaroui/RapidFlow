@@ -7,7 +7,7 @@ RapidFlow is using Jupyter as its backend server. It also provides client and ke
 
 based on [Flow.JS](https://github.com/totaljs/flow)
 
-![Image of Yaktocat](https://github.com/helkaroui/RapidFlow/tree/master/image/screen.png)
+![picture](https://github.com/helkaroui/RapidFlow/raw/master/image/screen.png)
 
 
 
