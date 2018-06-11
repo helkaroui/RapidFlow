@@ -1,7 +1,6 @@
 !--- Under Development ---! 
 # RapidFlow
-RapidFlow is a visual frontend to make machine learning approachable for Engineers with basic knowledge in data science.
-It's maint for configuring, building, and deploying machine learning models in Python.
+RapidFlow is a visual programming interface for Jupyter. RapidFlow can be used to create, configure and deploy machine learning models using already implemented functionalities (without writing code) and to launch API in minutes. It can be used to apply your models in real time to a variety of data sources, databases or streams from connected objects.
 
 RapidFlow is using Jupyter as its backend server. It also provides client and kernel management for working with kernels.
 
